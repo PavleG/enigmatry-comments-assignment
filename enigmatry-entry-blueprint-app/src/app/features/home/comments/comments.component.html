@@ -1,0 +1,4 @@
+<button type="button" mat-raised-button (click)="onAdd()">Add comment</button>
+@for (comment of comments; track comment.id) {
+<app-comment [comment]="comment" />
+}
