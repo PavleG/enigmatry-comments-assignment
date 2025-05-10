@@ -1,11 +1,10 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { SizeService } from '@services/size.service';
-import { MenuComponent } from '@shared/components/navigation/menu.component';
+import { HeaderComponent } from '@shared/components/header/header.component';
 
 @Component({
   standalone: true,
-  imports: [RouterOutlet, MenuComponent],
+  imports: [HeaderComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

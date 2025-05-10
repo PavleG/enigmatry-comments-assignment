@@ -20,7 +20,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
 import { provideMatDateFormats, provideMatDateLocale } from '../core/i18n/localization';
 
 @NgModule({
@@ -49,7 +48,6 @@ import { provideMatDateFormats, provideMatDateLocale } from '../core/i18n/locali
     MatRadioModule,
     MatCardModule,
     MatDatepickerModule,
-    MatDateFnsModule,
     MatMenuModule
   ],
   providers: [
