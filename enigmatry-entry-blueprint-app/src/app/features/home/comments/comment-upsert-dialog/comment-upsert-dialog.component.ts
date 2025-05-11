@@ -31,7 +31,11 @@ import type { UpsertDialogData } from './comment-upsert-dialog.model';
 })
 export class CommentUpsertDialogComponent {
   readonly dialogRef = inject(MatDialogRef<CommentUpsertDialogComponent>);
-  readonly data = inject<UpsertDialogData>(MAT_DIALOG_DATA);
+  data = inject<UpsertDialogData>(MAT_DIALOG_DATA);
+  formData: UpsertDialogData = {
+    title: this.data.title,
+    content: this.data.content
+  };
 
   closeDialog(): void {
     this.dialogRef.close();
