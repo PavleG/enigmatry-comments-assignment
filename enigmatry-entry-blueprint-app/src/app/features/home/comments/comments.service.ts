@@ -33,6 +33,20 @@ export class CommentsService {
     return this.comments;
   }
 
+  updateComment(id: string, updatedTitle: string, updatedDescription: string) {
+    this.comments = this.comments.map(comment =>
+      comment.id === id
+        ? {
+            ...comment,
+            title: updatedTitle,
+            description: updatedDescription,
+            editedOn: new Date().toISOString()
+            .split('T')[0]
+          }
+        : comment
+    );
+  }
+
   deleteComment(id: string) {
     this.comments = this.comments.filter(comment => comment.id !== id);
   }

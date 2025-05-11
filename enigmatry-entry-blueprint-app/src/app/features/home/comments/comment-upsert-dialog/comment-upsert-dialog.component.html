@@ -1,0 +1,22 @@
+<button type="button" mat-icon-button class="close-button" (click)="closeDialog()">
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</button>
+<h2 mat-dialog-title>Add/Edit comment</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput placeholder="{{ data.title }}" [(ngModel)]="data.title" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      placeholder="{{ data.content }}"
+      [(ngModel)]="data.content"
+    ></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button type="button" matButton [mat-dialog-close]="data">Post</button>
+  <button type="button" matButton (click)="closeDialog()">Cancel</button>
+</mat-dialog-actions>
