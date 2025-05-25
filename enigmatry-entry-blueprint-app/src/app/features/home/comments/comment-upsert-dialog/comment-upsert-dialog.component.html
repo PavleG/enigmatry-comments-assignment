@@ -1,33 +1,45 @@
-<button
-  type="button"
-  mat-icon-button
-  class="close-button"
-  (click)="closeDialog()"
->
-  <mat-icon class="close-icon" color="warn">close</mat-icon>
-</button>
-<h2 mat-dialog-title>Add/Edit comment</h2>
-<mat-dialog-content>
-  <mat-form-field>
-    <mat-label>Title</mat-label>
-    <input
-      matInput
-      placeholder="{{ data.title }}"
-      [(ngModel)]="formData.title"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Description</mat-label>
-    <textarea
-      matInput
-      placeholder="{{ data.content }}"
-      [(ngModel)]="formData.content"
-    ></textarea>
-  </mat-form-field>
-</mat-dialog-content>
-<mat-dialog-actions align="center">
-  <button type="button" matButton [mat-dialog-close]="formData" cdkFocusInitial>
-    Post
+<!-- HEADER -->
+<div class="dialog-header">
+  <h2 mat-dialog-title>Add/Edit Comment</h2>
+  <button
+    type="button"
+    mat-icon-button
+    class="close-button"
+    (click)="closeDialog()"
+  >
+    <mat-icon class="close-icon" color="warn">close</mat-icon>
   </button>
-  <button type="button" matButton (click)="closeDialog()">Cancel</button>
-</mat-dialog-actions>
+</div>
+
+<!-- FORM -->
+<form [formGroup]="form" (ngSubmit)="onPost()">
+  <mat-dialog-content>
+    <div class="form-row">
+      <label for="title">Title:</label>
+      <mat-form-field appearance="outline" class="input-field">
+        <input id="title" matInput formControlName="title" />
+        @if (isTitleInvalid) {
+        <mat-error>{{ titleErrorMessage }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <label for="content">Description:</label>
+      <mat-form-field appearance="outline" class="input-field">
+        <textarea id="content" matInput formControlName="content"></textarea>
+        @if (isContentInvalid) {
+        <mat-error>{{ contentErrorMessage }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <!-- ACTIONS -->
+  <mat-dialog-actions align="center" class="action-buttons">
+    <button type="submit" mat-raised-button color="primary" (click)="onPost()" cdkFocusInitial>
+      Post
+    </button>
+    <button type="button" mat-button (click)="closeDialog()">Cancel</button>
+  </mat-dialog-actions>
+</form>

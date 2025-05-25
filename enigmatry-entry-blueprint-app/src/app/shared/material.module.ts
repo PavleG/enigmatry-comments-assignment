@@ -43,7 +43,6 @@ import { provideMatDateFormats, provideMatDateLocale } from '../core/i18n/locali
     MatPaginatorModule,
     MatSortModule,
     MatInputModule,
-    MatButtonModule,
     MatSelectModule,
     MatRadioModule,
     MatCardModule,

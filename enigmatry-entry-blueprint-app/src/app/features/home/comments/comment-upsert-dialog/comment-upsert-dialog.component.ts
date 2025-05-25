@@ -1,16 +1,19 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
-  MatDialogClose,
   MatDialogContent,
   MatDialogRef,
   MatDialogTitle
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatInput } from '@angular/material/input';
+import { MaterialModule } from '@shared/material.module';
 import type { UpsertDialogData } from './comment-upsert-dialog.model';
 
 @Component({
@@ -20,23 +23,86 @@ import type { UpsertDialogData } from './comment-upsert-dialog.model';
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-    MatDialogClose,
     MatFormFieldModule,
-    MatInput,
-    MatIcon,
-    FormsModule
+    ReactiveFormsModule,
+    MaterialModule
   ],
   templateUrl: './comment-upsert-dialog.component.html',
   styleUrl: './comment-upsert-dialog.component.scss'
 })
 export class CommentUpsertDialogComponent {
-  readonly dialogRef = inject(MatDialogRef<CommentUpsertDialogComponent>);
-  data = inject<UpsertDialogData>(MAT_DIALOG_DATA);
-  formData: UpsertDialogData = {
-    title: this.data.title,
-    content: this.data.content
-  };
+  private readonly dialogRef = inject(
+    MatDialogRef<CommentUpsertDialogComponent>
+  );
+  private data = inject<UpsertDialogData>(MAT_DIALOG_DATA);
+  private readonly maxTitleLength = 20;
+  private readonly maxContentLength = 50;
+  form: FormGroup = new FormGroup({
+    title: new FormControl(this.data.title, {
+      validators: [
+        Validators.required,
+        Validators.pattern('^[a-zA-Z0-9 ]*$'),
+        Validators.maxLength(this.maxTitleLength)
+      ],
+      nonNullable: true,
+      updateOn: 'submit'
+    }),
+    content: new FormControl(this.data.content, {
+      validators: [
+        Validators.required,
+        Validators.maxLength(this.maxContentLength)
+      ],
+      nonNullable: true,
+      updateOn: 'submit'
+    })
+  });
 
+  get isTitleInvalid() {
+    return this.form.controls.title.dirty && this.form.controls.title.invalid;
+  }
+
+  get isContentInvalid() {
+    return (
+      this.form.controls.content.dirty && this.form.controls.content.invalid
+    );
+  }
+
+  get titleErrorMessage(): string | null {
+    const titleCtrl = this.form.controls.title;
+    if (titleCtrl?.hasError('required')) {
+      return 'Title is required';
+    }
+    if (titleCtrl?.hasError('pattern')) {
+      return 'Title can only contain letters, numbers, and spaces';
+    }
+    if (titleCtrl?.hasError('maxlength')) {
+      return `Title cannot be more than ${this.maxTitleLength} characters`;
+    }
+    return null;
+  }
+
+  get contentErrorMessage(): string | null {
+    const contentCtrl = this.form.controls.content;
+    if (contentCtrl?.hasError('required')) {
+      return 'Description is required';
+    }
+    if (contentCtrl?.hasError('maxlength')) {
+      return `Description cannot be more than ${this.maxContentLength} characters`;
+    }
+    return null;
+  }
+  onPost() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      // eslint-disable-next-line no-console
+      console.log(this.form.controls.content.errors);
+    } else {
+    this.dialogRef.close({
+      title: this.form.controls.title.value,
+      content: this.form.controls.content.value
+    });
+}
+  }
   closeDialog(): void {
     this.dialogRef.close();
   }
