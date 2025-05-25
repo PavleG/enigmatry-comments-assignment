@@ -2,14 +2,16 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { CoreModule } from '@app/core.module';
 
 import { acceptLanguageInterceptor, EntryCommonModule } from '@enigmatry/entry-components';
 import { SharedModule } from '@shared/shared.module';
-import { AppRoutingModule } from './app-routing.module';
+import { routes } from './app.routes';
 
 export const appConfig = (i18n: { localeId: 'en-US' | 'nl-NL' }): ApplicationConfig => ({
     providers: [
+        provideRouter(routes, withComponentInputBinding()),
         provideHttpClient(
             withInterceptors([acceptLanguageInterceptor])
         ),
@@ -18,8 +20,7 @@ export const appConfig = (i18n: { localeId: 'en-US' | 'nl-NL' }): ApplicationCon
             BrowserAnimationsModule,
             CoreModule,
             SharedModule,
-            EntryCommonModule.forRoot(),
-            AppRoutingModule
+            EntryCommonModule.forRoot()
         ]),
         { provide: LOCALE_ID, useValue: i18n.localeId }
     ]

@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 /* eslint-disable no-bitwise */
 import { Injectable } from '@angular/core';
+import type { Comment } from '@shared/model/comment.model';
 
 @Injectable({ providedIn: 'root' })
 export class CommentsService {
-  private comments = [
+  private comments: Comment[] = [
     {
       id: this.generateGUID(),
       title: 'This sucks',
@@ -31,11 +32,15 @@ export class CommentsService {
     }
   ];
 
-  getComments() {
+  getComments(): Comment[] {
     return this.comments;
   }
 
-  addComment(title: string, description: string) {
+  getComment(id: string): Comment | undefined {
+    return this.comments.find(c => c.id === id);
+  }
+
+  addComment(title: string, description: string): void {
     this.comments.unshift({
       id: this.generateGUID(),
       title,
@@ -45,7 +50,11 @@ export class CommentsService {
     });
   }
 
-  updateComment(id: string, updatedTitle: string, updatedDescription: string) {
+  updateComment(
+    id: string,
+    updatedTitle: string,
+    updatedDescription: string
+  ): void {
     this.comments = this.comments.map(comment =>
       comment.id === id
         ? {
@@ -58,11 +67,11 @@ export class CommentsService {
     );
   }
 
-  deleteComment(id: string) {
+  deleteComment(id: string): void {
     this.comments = this.comments.filter(comment => comment.id !== id);
   }
 
-  private getCurrentDate() {
+  private getCurrentDate(): string {
     return new Date().toISOString()
 .split('T')[0];
   }

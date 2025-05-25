@@ -1,6 +1,6 @@
 <mat-card appearance="outlined">
   <mat-card-header>
-    <mat-card-title>{{ comment.title }}</mat-card-title>
+    <mat-card-title [routerLink]="['comments', comment.id]">{{ comment.title }}</mat-card-title>
     <mat-card-subtitle>Posted: {{ comment.postedOn }}</mat-card-subtitle>
     @if (comment.editedOn) {<mat-card-subtitle>Edited: {{ comment.editedOn }}</mat-card-subtitle>}
   </mat-card-header>
