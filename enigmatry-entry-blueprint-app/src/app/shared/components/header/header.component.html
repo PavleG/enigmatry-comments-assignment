@@ -1,14 +1,29 @@
 <mat-toolbar class="main-menu">
-    <a class="logo item clickable" mat-button routerLink="//" routerLinkActive="router-link-active">
-      <span>Front end app</span>
+  <span class="logo-wrapper">
+    <a class="logo item clickable" mat-button routerLink="//">
+      <span i18n="@@app.title">Front end app</span>
     </a>
-    <nav class="content">
-      <div *ngFor="let menuItem of menuItems">
-        <button mat-button color="primary" class="item" [routerLink]="[menuItem.url]"
-          routerLinkActive="router-link-active" type="button">
-          <mat-icon class="icon" aria-hidden="false" [ariaLabel]="menuItem.aria" [fontIcon]="menuItem.icon"></mat-icon>
-          <span class="description">{{ menuItem.description }}</span>
-        </button>
-      </div>
-    </nav>
-  </mat-toolbar>
+  </span>
+
+  <span class="spacer"></span>
+
+  <nav class="content">
+    @for (language of languages; track $index) {
+    <button
+      mat-button
+      color="primary"
+      class="item"
+      type="button"
+      (click)="onLanguageSelect(language.short)"
+    >
+      <mat-icon
+        class="icon"
+        aria-hidden="false"
+        [ariaLabel]="language.aria"
+        [fontIcon]="language.icon"
+      ></mat-icon>
+      <span class="description">{{ language.description }}</span>
+    </button>
+    }
+  </nav>
+</mat-toolbar>

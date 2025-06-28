@@ -9,7 +9,7 @@ import { acceptLanguageInterceptor, EntryCommonModule } from '@enigmatry/entry-c
 import { SharedModule } from '@shared/shared.module';
 import { routes } from './app.routes';
 
-export const appConfig = (i18n: { localeId: 'en-US' | 'nl-NL' }): ApplicationConfig => ({
+export const appConfig = (i18n: { localeId: 'en-US' | 'nl-NL' | 'sr-Latn' }): ApplicationConfig => ({
     providers: [
         provideRouter(routes, withComponentInputBinding()),
         provideHttpClient(

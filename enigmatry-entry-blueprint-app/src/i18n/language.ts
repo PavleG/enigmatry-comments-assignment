@@ -2,7 +2,8 @@ import { environment } from '@env';
 
 export const localizations = {
   en: () => import('./en'),
-  nl: () => import('./nl')
+  nl: () => import('./nl'),
+  sr: () => import('./sr')
 };
 
 export type Language = keyof typeof localizations;
