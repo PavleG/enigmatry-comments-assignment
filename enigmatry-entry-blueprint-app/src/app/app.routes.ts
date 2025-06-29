@@ -3,6 +3,8 @@ import { CanActivateFn, Router, Routes } from '@angular/router';
 import { CommentDetailsComponent } from '@features/home/comments/comment-details/comment-details.component';
 import { CommentsService } from '@features/home/comments/comments.service';
 import { HomeComponent } from '@features/home/home.component';
+import { MessageService } from '@features/home/message-container/message.service';
+import { MessagesComponent } from '@features/messages/messages.component';
 import { NotAuthorizedComponent } from '@shared/components/not-authorized/not-authorized.component';
 import { NotFoundComponent } from '@shared/components/not-found/not-found.component';
 
@@ -21,6 +23,17 @@ export const detailsCanActivate: CanActivateFn = route => {
   return router.createUrlTree(['/unauthorized']);
 };
 
+export const messagesCanActivate: CanActivateFn = _ => {
+  const router = inject(Router);
+  const messageService = inject(MessageService);
+
+  if (messageService.canAccessMessagesPage()) {
+    return true;
+  }
+
+  return router.createUrlTree(['/']);
+};
+
 export const routes: Routes = [
   {
     path: '',
@@ -32,6 +45,11 @@ export const routes: Routes = [
     component: CommentDetailsComponent,
     pathMatch: 'full',
     canActivate: [detailsCanActivate]
+  },
+  {
+    path: 'messages',
+    component: MessagesComponent,
+    canActivate: [messagesCanActivate]
   },
   {
     path: 'unauthorized',

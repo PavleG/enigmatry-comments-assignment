@@ -1,0 +1,10 @@
+@if (!isDismissed) {
+<mat-card routerLink="messages" class="clickable">
+  <mat-card-content>
+    <span>You have new messages!</span>
+    <button type="button" mat-icon-button (click)="dismiss($event)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-card-content>
+</mat-card>
+}

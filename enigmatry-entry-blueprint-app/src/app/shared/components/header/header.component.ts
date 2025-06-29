@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MaterialModule } from '@shared/material.module';
 import { Language, setCurrentLanguage } from 'src/i18n/language';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MaterialModule, CommonModule],
+  imports: [RouterLink, MaterialModule, CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

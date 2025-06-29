@@ -1,0 +1,9 @@
+.clickable {
+  cursor: pointer;
+  position: relative;
+}
+mat-card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
