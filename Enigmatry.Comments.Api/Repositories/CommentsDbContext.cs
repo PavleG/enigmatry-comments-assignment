@@ -1,0 +1,23 @@
+using Enigmatry.Comments.Api.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Enigmatry.Comments.Api.Repositories;
+
+public class CommentsDbContext : DbContext
+{
+    public DbSet<Comment> Comments { get; set; }
+
+    public CommentsDbContext(DbContextOptions<CommentsDbContext> options) : base(options) { }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Comment>().HasData(
+            new Comment { Id = Guid.NewGuid(), Title = "First Comment", Text = "This is the first comment.", CreatedAt = DateTime.UtcNow },
+            new Comment { Id = Guid.NewGuid(), Title = "Second Comment", Text = "This is the second comment.", CreatedAt = DateTime.UtcNow },
+            new Comment { Id = Guid.NewGuid(), Title = "Third Comment", Text = "This is the third comment.", CreatedAt = DateTime.UtcNow },
+            new Comment { Id = Guid.NewGuid(), Title = "Fourth Comment", Text = "This is the fourth comment.", CreatedAt = DateTime.UtcNow },
+            new Comment { Id = Guid.NewGuid(), Title = "Fifth Comment", Text = "This is the fifth comment.", CreatedAt = DateTime.UtcNow },
+            new Comment { Id = Guid.NewGuid(), Title = "Sixth Comment", Text = "This is the sixth comment.", CreatedAt = DateTime.UtcNow }
+        );
+    }
+}
