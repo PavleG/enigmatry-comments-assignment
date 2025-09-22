@@ -7,20 +7,21 @@ import { MessageService } from '@features/home/message-container/message.service
 import { MessagesComponent } from '@features/messages/messages.component';
 import { NotAuthorizedComponent } from '@shared/components/not-authorized/not-authorized.component';
 import { NotFoundComponent } from '@shared/components/not-found/not-found.component';
+import { map, catchError, of } from 'rxjs';
 
 export const detailsCanActivate: CanActivateFn = route => {
   const commentId = route.params.commentId;
   const commentsService = inject(CommentsService);
   const router = inject(Router);
-
-  const comment = commentsService.getComment(commentId);
   const guardLen = 5;
 
-  if (comment && comment.description.length > guardLen) {
-    return true;
-  }
-
-  return router.createUrlTree(['/unauthorized']);
+  return commentsService.getComment(commentId).pipe(
+    map(comment => comment && comment.description.length > guardLen
+      ? true
+      : router.createUrlTree(['/unauthorized'])
+    ),
+    catchError(() => of(router.createUrlTree(['/unauthorized'])))
+  );
 };
 
 export const messagesCanActivate: CanActivateFn = _ => {

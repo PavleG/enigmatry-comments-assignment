@@ -1,86 +1,124 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 /* eslint-disable no-bitwise */
-import { Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import type { Comment } from '@shared/model/comment.model';
+import { catchError, Observable, tap, throwError } from 'rxjs';
+import { CommentsClient } from 'src/app/api/comments-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class CommentsService {
-  private comments: Comment[] = [
-    {
-      id: this.generateGUID(),
-      title: 'This sucks',
-      description:
-        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus delectus',
-      postedOn: '2024-10-02',
-      editedOn: '2024-10-03'
-    },
-    {
-      id: this.generateGUID(),
-      title: 'Best story ever',
-      description:
-        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus delectus',
-      postedOn: '2024-10-02',
-      editedOn: ''
-    },
-    {
-      id: this.generateGUID(),
-      title: 'FAAAKEEEE',
-      description:
-        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus delectus',
-      postedOn: '2024-10-28',
-      editedOn: '2024-11-03'
-    }
-  ];
+  private commentsClient = inject(CommentsClient);
+  private comments = signal<Comment[]>([]);
 
-  getComments(): Comment[] {
-    return this.comments;
+  loadedComments = this.comments.asReadonly();
+
+  getComments(): Observable<Comment[]> {
+    return this.commentsClient
+      .getComments()
+      .pipe(
+        catchError(error => {
+          // TODO: Logging
+          // eslint-disable-next-line no-console
+          console.error('Error fetching comments:', error);
+          return throwError(
+            () => new Error('Something went wrong fetching comments data')
+          );
+        })
+      )
+      .pipe(tap(comments => this.comments.set(comments)));
   }
 
-  getComment(id: string): Comment | undefined {
-    return this.comments.find(c => c.id === id);
+  getComment(id: string): Observable<Comment> {
+    return this.commentsClient.getComment(id).pipe(
+      catchError(error => {
+        // TODO: Logging
+        // eslint-disable-next-line no-console
+        console.error('Error fetching comment:', error);
+        return throwError(
+          () => new Error('Something went wrong fetching comment data')
+        );
+      })
+    );
   }
 
-  addComment(title: string, description: string): void {
-    this.comments.unshift({
-      id: this.generateGUID(),
-      title,
-      description,
-      postedOn: this.getCurrentDate(),
-      editedOn: ''
-    });
+  addComment(title: string, description: string): Observable<Comment> {
+    return this.commentsClient
+      .addComment(title, description)
+      .pipe(
+        catchError(error => {
+          // TODO: Logging
+          // eslint-disable-next-line no-console
+          console.error('Error adding comment:', error);
+          return throwError(
+            () => new Error('Something went wrong while adding new comment')
+          );
+        })
+      )
+      .pipe(
+        tap(comment => {
+          this.comments.update(comments =>
+            comments ? [...comments, comment] : [comment]
+          );
+        })
+      );
   }
 
   updateComment(
     id: string,
-    updatedTitle: string,
-    updatedDescription: string
-  ): void {
-    this.comments = this.comments.map(comment =>
-      comment.id === id
-        ? {
-            ...comment,
-            title: updatedTitle,
-            description: updatedDescription,
-            editedOn: this.getCurrentDate()
-          }
-        : comment
-    );
+    title: string,
+    description: string
+  ): Observable<void> {
+    return this.commentsClient
+      .updateComment(id, title, description)
+      .pipe(
+        catchError(error => {
+          // TODO: Logging
+          // eslint-disable-next-line no-console
+          console.error('Error updating comment:', error);
+          return throwError(
+            () => new Error('Something went wrong while updating comment')
+          );
+        })
+      ) // eagerly update the local state
+      .pipe(
+        tap(() => {
+          this.comments.update(comments => {
+            const index = comments.findIndex(c => c.id === id);
+            if (index !== -1) {
+              const updatedComments = [...comments];
+              updatedComments[index] = {
+                ...updatedComments[index],
+                title,
+                description,
+                editedOn: new Date().toISOString()
+              };
+              return updatedComments;
+            }
+            return comments;
+          });
+        })
+      );
   }
 
-  deleteComment(id: string): void {
-    this.comments = this.comments.filter(comment => comment.id !== id);
-  }
-
-  private getCurrentDate(): string {
-    return new Date().toISOString()
-.split('T')[0];
-  }
-
-  private generateGUID(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/gu, c => {
-      const r = Math.random() * 16 | 0;
-      const v = c === 'x' ? r : r & 0x3 | 0x8;
-      return v.toString(16);
-    });
+  deleteComment(id: string): Observable<void> {
+    return this.commentsClient
+      .deleteComment(id)
+      .pipe(
+        catchError(error => {
+          // TODO: Logging
+          // eslint-disable-next-line no-console
+          console.error('Error deleting comment:', error);
+          return throwError(
+            () => new Error('Something went wrong while deleting comment')
+          );
+        })
+      ) // eagerly update the local state
+      .pipe(
+        tap(() => {
+          this.comments.update(comments =>
+            comments.filter(c => c.id !== id)
+          );
+        })
+      );
   }
 }

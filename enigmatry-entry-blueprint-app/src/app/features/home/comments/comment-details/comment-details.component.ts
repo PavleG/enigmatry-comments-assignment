@@ -1,4 +1,12 @@
-import { Component, computed, inject, input } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  OnInit,
+  signal
+} from '@angular/core';
+import type { Comment } from '@shared/model/comment.model';
 import { CommentsService } from '../comments.service';
 
 @Component({
@@ -8,9 +16,23 @@ import { CommentsService } from '../comments.service';
   templateUrl: './comment-details.component.html',
   styleUrl: './comment-details.component.scss'
 })
-export class CommentDetailsComponent {
+export class CommentDetailsComponent implements OnInit {
+  comment = signal<Comment | undefined>(undefined);
+
   commentId = input.required<string>();
   commentsService = inject(CommentsService);
+  destroyRef = inject(DestroyRef);
 
-  comment = computed(() => this.commentsService.getComment(this.commentId()));
+  ngOnInit(): void {
+    const subscription = this.commentsService
+      .getComment(this.commentId())
+      .subscribe({
+        next: response => {
+          this.comment.set(response);
+        }
+      });
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
+  }
 }

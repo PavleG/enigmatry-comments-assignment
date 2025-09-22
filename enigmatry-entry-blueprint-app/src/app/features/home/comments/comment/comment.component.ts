@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,24 +17,54 @@ import { CommentsService } from '../comments.service';
 })
 export class CommentComponent {
   @Input({ required: true }) comment: Comment;
-  constructor(private commentsService: CommentsService, private dialog: MatDialog) {}
+  private destroyRef = inject(DestroyRef);
+  constructor(
+    private commentsService: CommentsService,
+    private dialog: MatDialog
+  ) {}
 
   onEdit() {
-    const dialogRef = this.dialog.open<CommentUpsertDialogComponent, UpsertDialogData, UpsertDialogData>(CommentUpsertDialogComponent, {
+    const dialogRef = this.dialog.open<
+      CommentUpsertDialogComponent,
+      UpsertDialogData,
+      UpsertDialogData
+    >(CommentUpsertDialogComponent, {
       data: { title: this.comment.title, content: this.comment.description }
     });
-    dialogRef.afterClosed().subscribe((result: UpsertDialogData | undefined) => {
-      if (result !== undefined) {
-        this.commentsService.updateComment(
-          this.comment.id,
-          result.title,
-          result.content
-        );
-      }
+
+    const subscription = dialogRef
+      .afterClosed()
+      .subscribe((result: UpsertDialogData | undefined) => {
+        if (result !== undefined) {
+          const updateSubscription = this.commentsService
+            .updateComment(this.comment.id, result.title, result.content)
+            .subscribe({
+              error: (err: Error) => {
+                // eslint-disable-next-line no-console
+                console.error('Error updating comment:', err);
+              }
+            });
+
+          this.destroyRef.onDestroy(() => {
+            updateSubscription.unsubscribe();
+          });
+        }
+      });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
     });
   }
 
   onDelete(id: string) {
-    this.commentsService.deleteComment(id);
+    const subscription = this.commentsService.deleteComment(id).subscribe({
+      error: (err: Error) => {
+        // eslint-disable-next-line no-console
+        console.error('Error deleting comment:', err);
+      }
+    });
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
   }
 }

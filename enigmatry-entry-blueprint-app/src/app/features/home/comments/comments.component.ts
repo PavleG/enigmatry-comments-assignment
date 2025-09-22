@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { CommentComponent } from './comment/comment.component';
@@ -13,14 +13,29 @@ import { CommentsService } from './comments.service';
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.scss'
 })
-export class CommentsComponent {
+export class CommentsComponent implements OnInit {
+  isFetching = signal<boolean>(false);
+  error = signal<string>('');
+  private destroyRef = inject(DestroyRef);
+
   constructor(
     private commentsService: CommentsService,
     private dialog: MatDialog
   ) {}
+  comments = this.commentsService.loadedComments;
 
-  get comments() {
-    return this.commentsService.getComments();
+  ngOnInit(): void {
+    this.isFetching.set(true);
+    const subscription = this.commentsService.getComments().subscribe({
+      error: (err: Error) => {
+        this.error.set(err.message);
+      },
+      complete: () => this.isFetching.set(false)
+    });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
   }
 
   onAdd() {
@@ -29,15 +44,26 @@ export class CommentsComponent {
       UpsertDialogData,
       UpsertDialogData
     >(CommentUpsertDialogComponent, { data: { title: '', content: '' } });
-    dialogRef
+
+    const subscription = dialogRef
       .afterClosed()
-      .subscribe((result: UpsertDialogData | undefined) => {
-        if (result !== undefined) {
-          this.commentsService.addComment(
-            result.title,
-            result.content
-          );
+      .subscribe((dialogData: UpsertDialogData | undefined) => {
+        if (dialogData !== undefined) {
+          const addSubscription = this.commentsService
+            .addComment(dialogData.title, dialogData.content)
+            .subscribe({
+              error: (err: Error) => {
+                this.error.set(err.message);
+              }
+            });
+          this.destroyRef.onDestroy(() => {
+            addSubscription.unsubscribe();
+          });
         }
       });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
   }
 }
