@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,7 +12,7 @@ import { CommentsService } from '../comments.service';
 @Component({
   selector: 'app-comment',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, RouterLink],
+  imports: [MatCardModule, MatButtonModule, RouterLink, DatePipe],
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.scss'
 })

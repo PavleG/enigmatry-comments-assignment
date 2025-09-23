@@ -1,8 +1,20 @@
 <mat-card appearance="outlined">
   <mat-card-header>
-    <mat-card-title [routerLink]="['comments', comment.id]">{{ comment.title }}</mat-card-title>
-    <mat-card-subtitle>Posted: {{ comment.postedOn }}</mat-card-subtitle>
-    @if (comment.editedOn) {<mat-card-subtitle>Edited: {{ comment.editedOn }}</mat-card-subtitle>}
+    <mat-card-title [routerLink]="['comments', comment.id]">{{
+      comment.title
+    }}</mat-card-title>
+    <mat-card-subtitle>
+      <span i18n="@@comment.postedOn">Posted date:</span>
+      {{ comment.postedOn | date }}
+      <span i18n="@@comment.by">by Some Person</span>
+    </mat-card-subtitle>
+    @if (comment.editedOn) {
+    <mat-card-subtitle>
+      <span i18n="@@comment.edited">Edited:</span>
+      {{ comment.editedOn | date }}
+      <span i18n="@@comment.by">by Some Person</span>
+    </mat-card-subtitle>
+    }
   </mat-card-header>
   <mat-card-content>
     <p>
@@ -10,8 +22,20 @@
     </p>
   </mat-card-content>
   <mat-card-actions align="end">
-    <button type="button" mat-raised-button (click)="onEdit()">Edit</button>
-    <button type="button" mat-raised-button (click)="onDelete(comment.id)">
+    <button
+      type="button"
+      mat-raised-button
+      (click)="onEdit()"
+      i18n="@@comment.edit"
+    >
+      Edit
+    </button>
+    <button
+      type="button"
+      mat-raised-button
+      (click)="onDelete(comment.id)"
+      i18n="@@comment.delete"
+    >
       Delete
     </button>
   </mat-card-actions>
