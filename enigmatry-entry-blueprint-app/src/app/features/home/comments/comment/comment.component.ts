@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
+import { ErrorService } from '@app/services/error.service';
 import type { Comment } from '../../../../shared/model/comment.model';
 import { CommentUpsertDialogComponent } from '../comment-upsert-dialog/comment-upsert-dialog.component';
 import type { UpsertDialogData } from '../comment-upsert-dialog/comment-upsert-dialog.model';
@@ -18,6 +19,7 @@ import { CommentsService } from '../comments.service';
 })
 export class CommentComponent {
   @Input({ required: true }) comment: Comment;
+  private errorService = inject(ErrorService);
   private destroyRef = inject(DestroyRef);
   constructor(
     private commentsService: CommentsService,
@@ -41,8 +43,7 @@ export class CommentComponent {
             .updateComment(this.comment.id, result.title, result.content)
             .subscribe({
               error: (err: Error) => {
-                // eslint-disable-next-line no-console
-                console.error('Error updating comment:', err);
+                this.errorService.showError(err.message);
               }
             });
 
@@ -60,8 +61,7 @@ export class CommentComponent {
   onDelete(id: string) {
     const subscription = this.commentsService.deleteComment(id).subscribe({
       error: (err: Error) => {
-        // eslint-disable-next-line no-console
-        console.error('Error deleting comment:', err);
+        this.errorService.showError(err.message);
       }
     });
     this.destroyRef.onDestroy(() => {

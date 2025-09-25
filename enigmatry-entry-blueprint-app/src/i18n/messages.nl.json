@@ -7,6 +7,7 @@
     "comment.edit": " Bewerken ",
     "comment.edited": "Bewerkt:",
     "comment.postedOn": "Geplaatst op:",
-    "route.home": "Thuis"
+    "route.home": "Thuis",
+    "error.close": "Sluit"
   }
 }

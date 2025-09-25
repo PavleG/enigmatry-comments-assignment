@@ -7,6 +7,7 @@
     "comment.edit": " Izmeni ",
     "comment.edited": "Izmenjeno:",
     "comment.postedOn": "Datum objave:",
-    "route.home": "Početna"
+    "route.home": "Početna",
+    "error.close": "Zatvori"
   }
 }

@@ -1,12 +1,13 @@
 {
   "locale": "en-US",
   "translations": {
-    "app.title": "Comments App",
-    "comment.by": "by Some Person",
-    "comment.delete": " Delete ",
-    "comment.edit": " Edit ",
-    "comment.edited": "Edited:",
+    "route.home": "Home",
+    "app.title": "Entry Blueprint App",
     "comment.postedOn": "Posted date:",
-    "route.home": "Home"
+    "comment.by": "by Some Person",
+    "comment.edited": "Edited:",
+    "comment.edit": " Edit ",
+    "comment.delete": " Delete ",
+    "error.close": "Close"
   }
 }

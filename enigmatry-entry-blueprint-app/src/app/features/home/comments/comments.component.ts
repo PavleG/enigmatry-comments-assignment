@@ -1,6 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { ErrorService } from '@app/services/error.service';
 import { CommentComponent } from './comment/comment.component';
 import { CommentUpsertDialogComponent } from './comment-upsert-dialog/comment-upsert-dialog.component';
 import { UpsertDialogData } from './comment-upsert-dialog/comment-upsert-dialog.model';
@@ -16,6 +17,7 @@ import { CommentsService } from './comments.service';
 export class CommentsComponent implements OnInit {
   isFetching = signal<boolean>(false);
   error = signal<string>('');
+  private errorService = inject(ErrorService);
   private destroyRef = inject(DestroyRef);
 
   constructor(
@@ -28,7 +30,7 @@ export class CommentsComponent implements OnInit {
     this.isFetching.set(true);
     const subscription = this.commentsService.getComments().subscribe({
       error: (err: Error) => {
-        this.error.set(err.message);
+        this.errorService.showError(err.message);
       },
       complete: () => this.isFetching.set(false)
     });
@@ -53,7 +55,7 @@ export class CommentsComponent implements OnInit {
             .addComment(dialogData.title, dialogData.content)
             .subscribe({
               error: (err: Error) => {
-                this.error.set(err.message);
+                this.errorService.showError(err.message);
               }
             });
           this.destroyRef.onDestroy(() => {

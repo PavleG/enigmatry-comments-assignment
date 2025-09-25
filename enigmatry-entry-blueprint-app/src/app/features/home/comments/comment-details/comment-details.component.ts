@@ -6,6 +6,7 @@ import {
   OnInit,
   signal
 } from '@angular/core';
+import { ErrorService } from '@app/services/error.service';
 import type { Comment } from '@shared/model/comment.model';
 import { CommentsService } from '../comments.service';
 
@@ -21,6 +22,7 @@ export class CommentDetailsComponent implements OnInit {
 
   commentId = input.required<string>();
   commentsService = inject(CommentsService);
+  errorService = inject(ErrorService);
   destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
@@ -29,6 +31,9 @@ export class CommentDetailsComponent implements OnInit {
       .subscribe({
         next: response => {
           this.comment.set(response);
+        },
+        error: (err: Error) => {
+          this.errorService.showError(err.message);
         }
       });
     this.destroyRef.onDestroy(() => {
