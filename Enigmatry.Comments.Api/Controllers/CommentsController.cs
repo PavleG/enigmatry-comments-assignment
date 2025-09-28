@@ -16,7 +16,38 @@ public class CommentsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Comment>> GetAll() => Ok(_service.GetAll());
+    public ActionResult<PagedResult> Search(
+    [FromQuery] int page = 0,
+    [FromQuery] int size = 5,
+    [FromQuery] string? search = null)
+    {
+        var query = _service.GetAll().AsQueryable();
+
+        if (!String.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(c =>
+                (c.Title != null && c.Title.Contains(search, StringComparison.OrdinalIgnoreCase)) ||
+                (c.Text != null && c.Text.Contains(search, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        var total = query.Count();
+
+        var items = query
+            .OrderByDescending(c => c.CreatedAt)
+            .Skip(page * size)
+            .Take(size)
+            .ToList();
+
+        var result = new PagedResult
+        {
+            Items = items,
+            TotalElements = total
+        };
+
+        return Ok(result);
+    }
+
+
 
     [HttpGet("{id}")]
     public ActionResult<Comment> GetById(Guid id)

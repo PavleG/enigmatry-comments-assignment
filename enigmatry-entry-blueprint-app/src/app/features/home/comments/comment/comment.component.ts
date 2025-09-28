@@ -1,10 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { Component, DestroyRef, inject, Input } from '@angular/core';
+import { Component, DestroyRef, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
 import { ErrorService } from '@app/services/error.service';
+import { filter, mergeMap } from 'rxjs';
 import type { Comment } from '../../../../shared/model/comment.model';
 import { CommentUpsertDialogComponent } from '../comment-upsert-dialog/comment-upsert-dialog.component';
 import type { UpsertDialogData } from '../comment-upsert-dialog/comment-upsert-dialog.model';
@@ -19,11 +20,12 @@ import { CommentsService } from '../comments.service';
 })
 export class CommentComponent {
   @Input({ required: true }) comment: Comment;
-  private errorService = inject(ErrorService);
-  private destroyRef = inject(DestroyRef);
+
   constructor(
     private commentsService: CommentsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private errorService: ErrorService,
+    private destroyRef: DestroyRef
   ) {}
 
   onEdit() {
@@ -37,25 +39,21 @@ export class CommentComponent {
 
     const subscription = dialogRef
       .afterClosed()
-      .subscribe((result: UpsertDialogData | undefined) => {
-        if (result !== undefined) {
-          const updateSubscription = this.commentsService
-            .updateComment(this.comment.id, result.title, result.content)
-            .subscribe({
-              error: (err: Error) => {
-                this.errorService.showError(err.message);
-              }
-            });
-
-          this.destroyRef.onDestroy(() => {
-            updateSubscription.unsubscribe();
-          });
-        }
+      .pipe(
+        filter((result): result is UpsertDialogData => result !== undefined),
+        mergeMap(result =>
+          this.commentsService.updateComment(
+            this.comment.id,
+            result.title,
+            result.content
+          )
+        )
+      )
+      .subscribe({
+        error: (err: Error) => this.errorService.showError(err.message)
       });
 
-    this.destroyRef.onDestroy(() => {
-      subscription.unsubscribe();
-    });
+    this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
 
   onDelete(id: string) {
@@ -64,8 +62,7 @@ export class CommentComponent {
         this.errorService.showError(err.message);
       }
     });
-    this.destroyRef.onDestroy(() => {
-      subscription.unsubscribe();
-    });
+
+    this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
 }

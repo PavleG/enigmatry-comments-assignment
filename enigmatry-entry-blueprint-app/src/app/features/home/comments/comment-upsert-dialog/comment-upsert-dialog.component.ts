@@ -7,12 +7,8 @@ import {
 } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
-  MatDialogActions,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle
+  MatDialogRef
 } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MaterialModule } from '@shared/material.module';
 import type { UpsertDialogData } from './comment-upsert-dialog.model';
 
@@ -20,10 +16,6 @@ import type { UpsertDialogData } from './comment-upsert-dialog.model';
   selector: 'app-comment-upsert-dialog',
   standalone: true,
   imports: [
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatFormFieldModule,
     ReactiveFormsModule,
     MaterialModule
   ],
@@ -35,8 +27,10 @@ export class CommentUpsertDialogComponent {
     MatDialogRef<CommentUpsertDialogComponent>
   );
   private data = inject<UpsertDialogData>(MAT_DIALOG_DATA);
+
   private readonly maxTitleLength = 20;
   private readonly maxContentLength = 50;
+
   form: FormGroup = new FormGroup({
     title: new FormControl(this.data.title, {
       validators: [
@@ -70,13 +64,13 @@ export class CommentUpsertDialogComponent {
   get titleErrorMessage(): string | null {
     const titleCtrl = this.form.controls.title;
     if (titleCtrl?.hasError('required')) {
-      return 'Title is required';
+      return $localize`:@@comment.title.required:Title is required`;
     }
     if (titleCtrl?.hasError('pattern')) {
-      return 'Title can only contain letters, numbers, and spaces';
+      return $localize`:@@comment.title.pattern:Title can only contain letters, numbers, and spaces`;
     }
     if (titleCtrl?.hasError('maxlength')) {
-      return `Title cannot be more than ${this.maxTitleLength} characters`;
+      return $localize`:@@comment.title.maxlength:Title cannot exceed ${this.maxTitleLength} characters`;
     }
     return null;
   }
@@ -84,25 +78,26 @@ export class CommentUpsertDialogComponent {
   get contentErrorMessage(): string | null {
     const contentCtrl = this.form.controls.content;
     if (contentCtrl?.hasError('required')) {
-      return 'Description is required';
+      return $localize`:@@comment.content.required:Description is required`;
     }
     if (contentCtrl?.hasError('maxlength')) {
-      return `Description cannot be more than ${this.maxContentLength} characters`;
+      return $localize`:@@comment.content.maxlength:Description cannot exceed ${this.maxContentLength} characters`;
     }
     return null;
   }
+
   onPost() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      // eslint-disable-next-line no-console
-      console.log(this.form.controls.content.errors);
-    } else {
+      return;
+    }
+
     this.dialogRef.close({
       title: this.form.controls.title.value,
       content: this.form.controls.content.value
     });
-}
   }
+
   closeDialog(): void {
     this.dialogRef.close();
   }

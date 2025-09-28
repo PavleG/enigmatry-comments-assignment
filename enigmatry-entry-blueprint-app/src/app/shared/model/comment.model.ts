@@ -3,5 +3,5 @@ export interface Comment {
   title: string;
   description: string;
   postedOn: string;
-  editedOn: string;
+  editedOn?: string;
 }

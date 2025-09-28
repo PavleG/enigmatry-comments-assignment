@@ -1,66 +1,74 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-/* eslint-disable no-bitwise */
 import { inject, Injectable, signal } from '@angular/core';
 import type { Comment } from '@shared/model/comment.model';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { PagedResult } from '@shared/model/paged-result.model';
+import {
+  catchError,
+  map,
+  Observable,
+  switchMap,
+  tap,
+  throwError,
+  ignoreElements
+} from 'rxjs';
 import { CommentsClient } from 'src/app/api/comments-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class CommentsService {
   private commentsClient = inject(CommentsClient);
+
   private comments = signal<Comment[]>([]);
+  private totalComments = signal<number>(0);
 
-  loadedComments = this.comments.asReadonly();
+  private currentPage = signal(0);
+  private currentSize = signal(5);
+  private currentSearch = signal<string | undefined>(undefined);
 
-  getComments(): Observable<Comment[]> {
-    return this.commentsClient
-      .getComments()
-      .pipe(
-        catchError(error => {
-          // TODO: Logging
-          // eslint-disable-next-line no-console
-          console.error('Error fetching comments:', error);
-          return throwError(
-            () => new Error('Something went wrong fetching comments data')
-          );
-        })
-      )
-      .pipe(tap(comments => this.comments.set(comments)));
-  }
+  readonly loadedComments = this.comments.asReadonly();
+  readonly totalLoadedComments = this.totalComments.asReadonly();
+  readonly pageIndex = this.currentPage.asReadonly();
+  readonly pageSize = this.currentSize.asReadonly();
 
-  getComment(id: string): Observable<Comment> {
-    return this.commentsClient.getComment(id).pipe(
-      catchError(error => {
-        // TODO: Logging
-        // eslint-disable-next-line no-console
-        console.error('Error fetching comment:', error);
-        return throwError(
-          () => new Error('Something went wrong fetching comment data')
-        );
-      })
+  getComments(
+    page = 0,
+    size = 5,
+    search?: string
+  ): Observable<PagedResult<Comment>> {
+    return this.commentsClient.getComments(page, size, search).pipe(
+      tap(pagedResult => {
+        this.comments.set(pagedResult.items);
+        this.totalComments.set(pagedResult.totalElements);
+        this.currentPage.set(page);
+        this.currentSize.set(size);
+        this.currentSearch.set(search);
+      }),
+      catchError(this.handleError<PagedResult<Comment>>('fetching comments'))
     );
   }
 
-  addComment(title: string, description: string): Observable<Comment> {
+  getComment(id: string): Observable<Comment> {
     return this.commentsClient
-      .addComment(title, description)
-      .pipe(
-        catchError(error => {
-          // TODO: Logging
-          // eslint-disable-next-line no-console
-          console.error('Error adding comment:', error);
-          return throwError(
-            () => new Error('Something went wrong while adding new comment')
-          );
-        })
-      )
-      .pipe(
-        tap(comment => {
-          this.comments.update(comments =>
-            comments ? [...comments, comment] : [comment]
-          );
-        })
-      );
+      .getComment(id)
+      .pipe(catchError(this.handleError<Comment>('fetching comment')));
+  }
+
+  reloadCurrentPage(): Observable<PagedResult<Comment>> {
+    return this.getComments(
+      this.currentPage(),
+      this.currentSize(),
+      this.currentSearch()
+    );
+  }
+
+  reloadFirstPage(): Observable<PagedResult<Comment>> {
+    return this.getComments(0, this.currentSize(), this.currentSearch());
+  }
+
+  addComment(title: string, description: string): Observable<Comment> {
+    return this.commentsClient.addComment(title, description).pipe(
+      switchMap(comment => this.reloadFirstPage().pipe(map(() => comment))),
+      catchError(this.handleError<Comment>('adding comment'))
+    );
   }
 
   updateComment(
@@ -68,57 +76,40 @@ export class CommentsService {
     title: string,
     description: string
   ): Observable<void> {
-    return this.commentsClient
-      .updateComment(id, title, description)
-      .pipe(
-        catchError(error => {
-          // TODO: Logging
-          // eslint-disable-next-line no-console
-          console.error('Error updating comment:', error);
-          return throwError(
-            () => new Error('Something went wrong while updating comment')
-          );
-        })
-      ) // eagerly update the local state
-      .pipe(
-        tap(() => {
-          this.comments.update(comments => {
-            const index = comments.findIndex(c => c.id === id);
-            if (index !== -1) {
-              const updatedComments = [...comments];
-              updatedComments[index] = {
-                ...updatedComments[index],
-                title,
-                description,
-                editedOn: new Date().toISOString()
-              };
-              return updatedComments;
-            }
-            return comments;
-          });
-        })
-      );
+    return this.commentsClient.updateComment(id, title, description).pipe(
+      switchMap(() => this.reloadCurrentPage().pipe(ignoreElements())),
+      catchError(this.handleError<void>('updating comment'))
+    );
   }
 
   deleteComment(id: string): Observable<void> {
-    return this.commentsClient
-      .deleteComment(id)
-      .pipe(
-        catchError(error => {
-          // TODO: Logging
-          // eslint-disable-next-line no-console
-          console.error('Error deleting comment:', error);
-          return throwError(
-            () => new Error('Something went wrong while deleting comment')
-          );
-        })
-      ) // eagerly update the local state
-      .pipe(
-        tap(() => {
-          this.comments.update(comments =>
-            comments.filter(c => c.id !== id)
-          );
-        })
+    return this.commentsClient.deleteComment(id).pipe(
+      switchMap(() => {
+        const totalPagesAfterDelete = Math.ceil((this.totalComments() - 1) / this.currentSize());
+        const newPage = Math.min(this.currentPage(), totalPagesAfterDelete - 1);
+        this.currentPage.set(newPage >= 0 ? newPage : 0);
+
+        return this.reloadCurrentPage().pipe(ignoreElements());
+      }),
+      catchError(this.handleError<void>('deleting comment'))
+    );
+  }
+
+  private handleError<T>(context: string): (error: unknown) => Observable<T> {
+    return (error: unknown): Observable<T> => {
+      if (error instanceof Error) {
+        // TODO: Log the error
+        // eslint-disable-next-line no-console
+        console.error(`Error in ${context}:`, error.message);
+      } else {
+        // TODO: Log the error
+        // eslint-disable-next-line no-console
+        console.error(`Error in ${context}:`, error);
+      }
+      return throwError(
+        // TODO: Translate the error message
+        () => new Error(`Something went wrong ${context.toLowerCase()}`)
       );
+    };
   }
 }

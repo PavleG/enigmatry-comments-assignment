@@ -3,8 +3,12 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import {
+  MatFormFieldModule,
+  MAT_FORM_FIELD_DEFAULT_OPTIONS
+} from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -20,13 +24,17 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { provideMatDateFormats, provideMatDateLocale } from '../core/i18n/localization';
+import {
+  provideMatDateFormats,
+  provideMatDateLocale
+} from '../core/i18n/localization';
 
 @NgModule({
   declarations: [],
   imports: [],
   exports: [
     MatTableModule,
+    MatDialogModule,
     MatCardModule,
     MatIconModule,
     MatListModule,
@@ -52,7 +60,10 @@ import { provideMatDateFormats, provideMatDateLocale } from '../core/i18n/locali
   providers: [
     provideMatDateLocale(),
     provideMatDateFormats(),
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline', floatLabel: 'auto' } }
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: 'outline', floatLabel: 'auto' }
+    }
   ]
 })
-export class MaterialModule { }
+export class MaterialModule {}

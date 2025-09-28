@@ -3,11 +3,21 @@
   "translations": {
     "app.title": "Pregled komentara",
     "comment.by": ", neki korisnik",
+    "comment.cancel.button": "Otkaži",
+    "comment.content.label": "Opis:",
+    "comment.content.maxlength": "Opis ne može biti duži od {$PH} karaktera",
+    "comment.content.required": "Opis je obavezan",
     "comment.delete": " Obriši ",
+    "comment.dialog.title": "Dodaj/Izmeni Komentar",
     "comment.edit": " Izmeni ",
+    "comment.post.button": " Objavi ",
     "comment.edited": "Izmenjeno:",
     "comment.postedOn": "Datum objave:",
-    "route.home": "Početna",
-    "error.close": "Zatvori"
+    "comment.title.label": "Naslov:",
+    "comment.title.maxlength": "Naslov ne može biti duži od {$PH} karaktera",
+    "comment.title.pattern": "Naslov može sadržati samo slova, brojeve i razmake",
+    "comment.title.required": "Naslov je obavezan",
+    "error.close": "Zatvori",
+    "route.home": "Početna"
   }
 }

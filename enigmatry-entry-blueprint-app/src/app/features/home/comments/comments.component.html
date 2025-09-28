@@ -1,8 +1,21 @@
 <button type="button" mat-raised-button (click)="onAdd()">Add comment</button>
-@if (isFetching() && !error()) {
+@if (isFetching()) {
 <p>Loading comments...</p>
-} @if (error()) {
-<p class="error">{{ error() }}</p>
-} @for (comment of comments(); track comment.id) {
+}
+@if (comments().length === 0 && !isFetching()) {
+<p>No comments found.</p>
+}
+@for (comment of comments(); track comment.id) {
 <app-comment [comment]="comment" />
+}
+
+@if (totalComments() > 0) {
+<mat-paginator
+  [length]="totalComments()"
+  [pageSize]="pageSize()"
+  [pageIndex]="pageIndex()"
+  [pageSizeOptions]="pageSizeOptions"
+  (page)="onPageChange($event)"
+>
+</mat-paginator>
 }

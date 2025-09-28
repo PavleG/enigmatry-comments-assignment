@@ -1,21 +1,13 @@
-<!-- HEADER -->
-<div class="dialog-header">
-  <h2 mat-dialog-title>Add/Edit Comment</h2>
-  <button
-    type="button"
-    mat-icon-button
-    class="close-button"
-    (click)="closeDialog()"
-  >
-    <mat-icon class="close-icon" color="warn">close</mat-icon>
-  </button>
-</div>
-
-<!-- FORM -->
 <form [formGroup]="form" (ngSubmit)="onPost()">
+  <div class="dialog-header">
+    <h2 mat-dialog-title i18n="@@comment.dialog.title">Add/Edit Comment</h2>
+    <button type="button" mat-icon-button (click)="closeDialog()">
+      <mat-icon color="warn">close</mat-icon>
+    </button>
+  </div>
   <mat-dialog-content>
     <div class="form-row">
-      <label for="title">Title:</label>
+      <label for="title" i18n="@@comment.title.label">Title:</label>
       <mat-form-field appearance="outline" class="input-field">
         <input id="title" matInput formControlName="title" />
         @if (isTitleInvalid) {
@@ -25,7 +17,7 @@
     </div>
 
     <div class="form-row">
-      <label for="content">Description:</label>
+      <label for="content" i18n="@@comment.content.label">Description:</label>
       <mat-form-field appearance="outline" class="input-field">
         <textarea id="content" matInput formControlName="content"></textarea>
         @if (isContentInvalid) {
@@ -35,11 +27,10 @@
     </div>
   </mat-dialog-content>
 
-  <!-- ACTIONS -->
   <mat-dialog-actions align="center" class="action-buttons">
-    <button type="submit" mat-raised-button color="primary" (click)="onPost()" cdkFocusInitial>
+    <button type="submit" mat-raised-button color="primary" cdkFocusInitial i18n="@@comment.post.button">
       Post
     </button>
-    <button type="button" mat-button (click)="closeDialog()">Cancel</button>
+    <button type="button" mat-button (click)="closeDialog()" i18n="@@comment.cancel.button">Cancel</button>
   </mat-dialog-actions>
 </form>

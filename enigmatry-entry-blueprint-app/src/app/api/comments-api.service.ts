@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import type { Comment } from '@shared/model/comment.model';
+import { PagedResult } from '@shared/model/paged-result.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -10,18 +11,35 @@ export class CommentsClient {
 
   constructor(private httpClient: HttpClient) {}
 
-  getComments(): Observable<Comment[]> {
-    return this.httpClient.get<CommentApiDto[]>(this.apiUrl).pipe(
-      map(response =>
-        response.map(item => ({
-          id: item.id,
-          title: item.title,
-          description: item.text,
-          postedOn: item.createdAt,
-          editedOn: item.lastEditedAt
-        }))
-      )
-    );
+  getComments(
+    page = 1,
+    size = 5,
+    search?: string
+  ): Observable<PagedResult<Comment>> {
+    let params = new HttpParams()
+    .set('page', page)
+    .set('size', size);
+
+    if (search) {
+      params = params.set('search', search);
+    }
+
+    return this.httpClient
+      .get<PagedResultDto<CommentApiDto>>(this.apiUrl, { params })
+      .pipe(
+        map<PagedResultDto<CommentApiDto>, PagedResult<Comment>>(
+          response => ({
+            items: response.items.map(item => ({
+              id: item.id,
+              title: item.title,
+              description: item.text,
+              postedOn: item.createdAt,
+              editedOn: item.lastEditedAt
+            })),
+            totalElements: response.totalElements
+          })
+        )
+      );
   }
 
   getComment(id: string): Observable<Comment> {
@@ -71,5 +89,10 @@ export interface CommentApiDto {
   title: string;
   text: string;
   createdAt: string;
-  lastEditedAt: string;
+  lastEditedAt?: string;
+}
+
+export interface PagedResultDto<T> {
+  items: T[];
+  totalElements: number;
 }

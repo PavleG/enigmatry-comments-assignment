@@ -1,13 +1,23 @@
 {
   "locale": "en-US",
   "translations": {
-    "route.home": "Home",
-    "app.title": "Entry Blueprint App",
-    "comment.postedOn": "Posted date:",
+    "app.title": "Comments App",
     "comment.by": "by Some Person",
-    "comment.edited": "Edited:",
-    "comment.edit": " Edit ",
+    "comment.cancel.button": "Cancel",
+    "comment.content.label": "Description:",
+    "comment.content.maxlength": "Description cannot exceed {$PH} characters",
+    "comment.content.required": "Description is required",
     "comment.delete": " Delete ",
-    "error.close": "Close"
+    "comment.dialog.title": "Add/Edit Comment",
+    "comment.edit": " Edit ",
+    "comment.post.button": " Post ",
+    "comment.edited": "Edited:",
+    "comment.postedOn": "Posted date:",
+    "comment.title.label": "Title:",
+    "comment.title.maxlength": "Title cannot exceed {$PH} characters",
+    "comment.title.pattern": "Title can only contain letters, numbers, and spaces",
+    "comment.title.required": "Title is required",
+    "error.close": "Close",
+    "route.home": "Home"
   }
 }

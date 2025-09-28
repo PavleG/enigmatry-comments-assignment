@@ -2,12 +2,22 @@
   "locale": "nl-NL",
   "translations": {
     "app.title": "Opmerkingen App",
-    "comment.by": "door iemand",
-    "comment.delete": " Verwijderen ",
+    "comment.by": "door Iemand",
+    "comment.cancel.button": "Annuleren",
+    "comment.content.label": "Beschrijving:",
+    "comment.content.maxlength": "Beschrijving mag niet langer zijn dan {$PH} tekens",
+    "comment.content.required": "Beschrijving is verplicht",
+    "comment.delete": " Verwijder ",
+    "comment.dialog.title": "Opmerking Toevoegen/Bewerken",
     "comment.edit": " Bewerken ",
+    "comment.post.button": " Plaatsen ",
     "comment.edited": "Bewerkt:",
     "comment.postedOn": "Geplaatst op:",
-    "route.home": "Thuis",
-    "error.close": "Sluit"
+    "comment.title.label": "Titel:",
+    "comment.title.maxlength": "Titel mag niet langer zijn dan {$PH} tekens",
+    "comment.title.pattern": "Titel mag alleen letters, cijfers en spaties bevatten",
+    "comment.title.required": "Titel is verplicht",
+    "error.close": "Sluit",
+    "route.home": "Home"
   }
 }
