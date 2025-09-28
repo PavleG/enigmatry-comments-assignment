@@ -1,46 +1,51 @@
-@use 'variables' as vars;
+@use "variables" as vars;
 
 .main-menu {
-	position: sticky;
-	z-index: 2;
-	top: 0;
-	justify-content: space-between;
-	border-bottom: 2px solid #F0F0F0;
-	background-color: vars.$menu-background;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #f0f0f0;
+  background-color: vars.$menu-background;
 
-	.content {
-		display: flex;
-		width: 100%;
-	}
+  .left-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 
-	.item {
-		margin-right: 30px;
-	}
+    .logo {
+      padding: 2px vars.$default-gap;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
 
-	.user-item {
-		display: flex;
-		flex-direction: row-reverse;
-		margin-left: auto;
+    .search-field {
+      // TODO: centers the search field
+      display: flex;
+      align-items: center; // centers the mat-form-field wrapper
+      min-width: 250px;
+      max-width: 400px;
+    }
+  }
 
-		.icon {
-			margin: 0 0 0 4px;
-		}
-	}
+  .spacer {
+    flex: 1 1 auto; // pushes right content to the edge
+  }
 
-	.logo {
-		padding: 2px vars.$default-gap;
-		border-radius: 5px;
-	}
+  .content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
-	.logo-image {
-		height: 32px;
-		vertical-align: middle;
-	}
-}
+    .item {
+      margin-right: 0; // spacing controlled by gap
+    }
 
-.main-user-actions .action {
-	display: flex;
-	justify-content: flex-start;
-	width: 100%;
-	padding: 10px 20px;
+    .icon {
+      margin-right: 4px;
+    }
+  }
 }
