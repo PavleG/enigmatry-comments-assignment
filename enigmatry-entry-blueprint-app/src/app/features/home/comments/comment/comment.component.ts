@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
 import { ErrorService } from '@app/services/error.service';
+import { PipesModule } from '@shared/pipes/pipes.module';
 import { filter, mergeMap } from 'rxjs';
 import type { Comment } from '../../../../shared/model/comment.model';
 import { CommentUpsertDialogComponent } from '../comment-upsert-dialog/comment-upsert-dialog.component';
@@ -14,7 +15,7 @@ import { CommentsService } from '../comments.service';
 @Component({
   selector: 'app-comment',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, RouterLink, DatePipe],
+  imports: [MatCardModule, MatButtonModule, RouterLink, DatePipe, PipesModule],
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.scss'
 })
