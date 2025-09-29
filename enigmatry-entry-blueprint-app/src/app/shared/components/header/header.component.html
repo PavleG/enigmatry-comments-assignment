@@ -7,9 +7,8 @@
     <mat-form-field appearance="outline" class="search-field">
       <input
         matInput
-        placeholder="Search comments"
-        [(ngModel)]="searchTerm"
-        (ngModelChange)="onSearch($event)"
+        placeholder="{{ searchTextPlaceholder }}"
+        [formControl]="searchControl"
       />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>

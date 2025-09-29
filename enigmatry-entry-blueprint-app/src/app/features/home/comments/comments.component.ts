@@ -64,7 +64,7 @@ export class CommentsComponent implements OnInit {
   private loadPage(pageIndex: number, pageSize: number) {
     this.isFetching.set(true);
     const subscription = this.commentsService
-      .getComments(pageIndex, pageSize)
+      .loadPage(pageIndex, pageSize)
       .subscribe({
         error: (err: Error) => {
           this.errorService.showError(err.message);

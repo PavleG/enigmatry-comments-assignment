@@ -29,44 +29,15 @@ export class CommentsService {
   readonly pageIndex = this.currentPage.asReadonly();
   readonly pageSize = this.currentSize.asReadonly();
 
-  getComments(
-    page = 0,
-    size = 5,
-    search?: string
-  ): Observable<PagedResult<Comment>> {
-    return this.commentsClient.getComments(page, size, search).pipe(
-      tap(pagedResult => {
-        this.comments.set(pagedResult.items);
-        this.totalComments.set(pagedResult.totalElements);
-        this.currentPage.set(page);
-        this.currentSize.set(size);
-        this.currentSearch.set(search);
-      }),
-      catchError(this.handleError<PagedResult<Comment>>('fetching comments'))
-    );
-  }
-
   getComment(id: string): Observable<Comment> {
     return this.commentsClient
       .getComment(id)
       .pipe(catchError(this.handleError<Comment>('fetching comment')));
   }
 
-  reloadCurrentPage(): Observable<PagedResult<Comment>> {
-    return this.getComments(
-      this.currentPage(),
-      this.currentSize(),
-      this.currentSearch()
-    );
-  }
-
-  reloadFirstPage(): Observable<PagedResult<Comment>> {
-    return this.getComments(0, this.currentSize(), this.currentSearch());
-  }
-
   addComment(title: string, description: string): Observable<Comment> {
     return this.commentsClient.addComment(title, description).pipe(
-      switchMap(comment => this.reloadFirstPage().pipe(map(() => comment))),
+      switchMap(comment => this.loadFirstPage().pipe(map(() => comment))),
       catchError(this.handleError<Comment>('adding comment'))
     );
   }
@@ -85,13 +56,35 @@ export class CommentsService {
   deleteComment(id: string): Observable<void> {
     return this.commentsClient.deleteComment(id).pipe(
       switchMap(() => {
-        const totalPagesAfterDelete = Math.ceil((this.totalComments() - 1) / this.currentSize());
+        const totalPagesAfterDelete = Math.ceil(
+          (this.totalComments() - 1) / this.currentSize()
+        );
         const newPage = Math.min(this.currentPage(), totalPagesAfterDelete - 1);
         this.currentPage.set(newPage >= 0 ? newPage : 0);
 
         return this.reloadCurrentPage().pipe(ignoreElements());
       }),
       catchError(this.handleError<void>('deleting comment'))
+    );
+  }
+
+  loadFirstPage(): Observable<PagedResult<Comment>> {
+    return this.getComments(0, this.currentSize(), this.currentSearch());
+  }
+
+  loadPage(page: number, size: number): Observable<PagedResult<Comment>> {
+    return this.getComments(page, size, this.currentSearch());
+  }
+
+  search(searchTerm: string): Observable<PagedResult<Comment>> {
+    return this.getComments(0, this.currentSize(), searchTerm);
+  }
+
+  reloadCurrentPage(): Observable<PagedResult<Comment>> {
+    return this.getComments(
+      this.currentPage(),
+      this.currentSize(),
+      this.currentSearch()
     );
   }
 
@@ -111,5 +104,22 @@ export class CommentsService {
         () => new Error(`Something went wrong ${context.toLowerCase()}`)
       );
     };
+  }
+
+  private getComments(
+    page = 0,
+    size = 5,
+    search?: string
+  ): Observable<PagedResult<Comment>> {
+    return this.commentsClient.getComments(page, size, search).pipe(
+      tap(pagedResult => {
+        this.comments.set(pagedResult.items);
+        this.totalComments.set(pagedResult.totalElements);
+        this.currentPage.set(page);
+        this.currentSize.set(size);
+        this.currentSearch.set(search);
+      }),
+      catchError(this.handleError<PagedResult<Comment>>('fetching comments'))
+    );
   }
 }
