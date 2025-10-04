@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MaterialModule } from '@shared/material.module';
 import { MessageService } from './message.service';
 
@@ -10,18 +10,10 @@ import { MessageService } from './message.service';
   templateUrl: './message-container.component.html',
   styleUrl: './message-container.component.scss'
 })
-export class MessageContainerComponent implements OnInit {
-  isDismissed = false;
-
-  constructor(private messageService: MessageService, private router: Router) {}
-
-  ngOnInit() {
-    this.isDismissed = this.messageService.isDismissed();
-  }
-
+export class MessageContainerComponent {
+  messageService = inject(MessageService);
   dismiss(event: MouseEvent) {
     event.stopPropagation();
     this.messageService.dismissMessage();
-    this.isDismissed = true;
   }
 }

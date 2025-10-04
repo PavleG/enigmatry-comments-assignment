@@ -1,18 +1,30 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
+import { map } from 'rxjs';
+import { MessagesClient } from 'src/app/api/messages-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class MessageService {
-  private dismissedKey = 'appMessageDismissed';
+  private messagesClient = inject(MessagesClient);
 
-  isDismissed(): boolean {
-    return localStorage.getItem(this.dismissedKey) === 'true';
+  private isDismissedFlag = signal<boolean>(false);
+
+  readonly isDismissed = this.isDismissedFlag.asReadonly();
+
+  constructor() {
+    this.messagesClient.isDismissed().subscribe({
+      next: dismissed => this.isDismissedFlag.set(dismissed),
+      error: () => this.isDismissedFlag.set(false)
+    });
   }
 
-  dismissMessage() {
-    localStorage.setItem(this.dismissedKey, 'true');
+  dismissMessage(): void {
+    this.isDismissedFlag.set(true);
+    this.messagesClient.dismiss().subscribe();
   }
 
-  canAccessMessagesPage(): boolean {
-    return !this.isDismissed();
+  canAccessMessagesPage() {
+    return this.messagesClient.isDismissed().pipe(
+      map(dismissed => !dismissed)
+    );
   }
 }

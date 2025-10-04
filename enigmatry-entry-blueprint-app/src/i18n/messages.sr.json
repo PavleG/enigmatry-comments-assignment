@@ -10,14 +10,20 @@
     "comment.delete": " Obriši ",
     "comment.dialog.title": "Dodaj/Izmeni Komentar",
     "comment.edit": " Izmeni ",
-    "comment.post.button": " Objavi ",
     "comment.edited": "Izmenjeno:",
+    "comment.post.button": " Objavi ",
     "comment.postedOn": "Datum objave:",
     "comment.title.label": "Naslov:",
     "comment.title.maxlength": "Naslov ne može biti duži od {$PH} karaktera",
     "comment.title.pattern": "Naslov može sadržati samo slova, brojeve i razmake",
     "comment.title.required": "Naslov je obavezan",
     "error.close": "Zatvori",
-    "route.home": "Početna"
+    "header.search.placeholder": "Pretraži komentare",
+    "message-box.message": "Imate nove poruke!",
+    "route.comment-details": "Detalji komentara",
+    "route.home": "Početna",
+    "route.messages": "Poruke",
+    "route.not-found": "Ne postoji",
+    "route.unauthorized": "Niste autorizovani"
   }
 }

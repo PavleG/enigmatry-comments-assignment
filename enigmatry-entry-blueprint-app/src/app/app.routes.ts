@@ -24,15 +24,13 @@ export const detailsCanActivate: CanActivateFn = route => {
   );
 };
 
-export const messagesCanActivate: CanActivateFn = _ => {
+export const messagesCanActivate: CanActivateFn = () => {
   const router = inject(Router);
   const messageService = inject(MessageService);
 
-  if (messageService.canAccessMessagesPage()) {
-    return true;
-  }
-
-  return router.createUrlTree(['/']);
+  return messageService
+    .canAccessMessagesPage()
+    .pipe(map(canAccess => canAccess ? true : router.createUrlTree(['/'])));
 };
 
 export const routes: Routes = [
@@ -44,20 +42,24 @@ export const routes: Routes = [
   {
     path: 'comments/:commentId',
     component: CommentDetailsComponent,
+    title: $localize`:@@route.comment-details:Comment Details`,
     pathMatch: 'full',
     canActivate: [detailsCanActivate]
   },
   {
     path: 'messages',
     component: MessagesComponent,
+    title: $localize`:@@route.messages:Messages`,
     canActivate: [messagesCanActivate]
   },
   {
     path: 'unauthorized',
-    component: NotAuthorizedComponent
+    component: NotAuthorizedComponent,
+    title: $localize`:@@route.unauthorized:Not Authorized`
   },
   {
     path: '**',
-    component: NotFoundComponent
+    component: NotFoundComponent,
+    title: $localize`:@@route.not-found:Not Found`
   }
 ];

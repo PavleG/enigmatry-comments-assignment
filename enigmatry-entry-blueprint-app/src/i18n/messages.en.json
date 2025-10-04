@@ -10,14 +10,20 @@
     "comment.delete": " Delete ",
     "comment.dialog.title": "Add/Edit Comment",
     "comment.edit": " Edit ",
-    "comment.post.button": " Post ",
     "comment.edited": "Edited:",
+    "comment.post.button": " Post ",
     "comment.postedOn": "Posted date:",
     "comment.title.label": "Title:",
     "comment.title.maxlength": "Title cannot exceed {$PH} characters",
     "comment.title.pattern": "Title can only contain letters, numbers, and spaces",
     "comment.title.required": "Title is required",
     "error.close": "Close",
-    "route.home": "Home"
+    "header.search.placeholder": "Search comments",
+    "message-box.message": "You have new messages!",
+    "route.comment-details": "Comment Details",
+    "route.home": "Home",
+    "route.messages": "Messages",
+    "route.not-found": "Not Found",
+    "route.unauthorized": "Not Authorized"
   }
 }

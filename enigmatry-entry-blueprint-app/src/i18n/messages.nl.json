@@ -10,14 +10,20 @@
     "comment.delete": " Verwijder ",
     "comment.dialog.title": "Opmerking Toevoegen/Bewerken",
     "comment.edit": " Bewerken ",
-    "comment.post.button": " Plaatsen ",
     "comment.edited": "Bewerkt:",
+    "comment.post.button": " Plaatsen ",
     "comment.postedOn": "Geplaatst op:",
     "comment.title.label": "Titel:",
     "comment.title.maxlength": "Titel mag niet langer zijn dan {$PH} tekens",
     "comment.title.pattern": "Titel mag alleen letters, cijfers en spaties bevatten",
     "comment.title.required": "Titel is verplicht",
     "error.close": "Sluit",
-    "route.home": "Home"
+    "header.search.placeholder": "Zoek reacties",
+    "message-box.message": "Je hebt nieuwe berichten!",
+    "route.comment-details": "Reactie Details",
+    "route.home": "Startpagina",
+    "route.messages": "Berichten",
+    "route.not-found": "Niet gevonden",
+    "route.unauthorized": "Niet toegestaan"
   }
 }
