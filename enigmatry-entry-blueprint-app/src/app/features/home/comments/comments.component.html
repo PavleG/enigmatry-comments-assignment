@@ -1,9 +1,9 @@
-<button type="button" mat-raised-button (click)="onAdd()">Add comment</button>
+<button type="button" mat-raised-button (click)="onAdd()" i18n="@@comments.add">Add comment</button>
 @if (isFetching()) {
-<p>Loading comments...</p>
+<p i18n="@@comments.loading">Loading comments...</p>
 }
 @if (comments().length === 0 && !isFetching()) {
-<p>No comments found.</p>
+<p i18n="@@comments.empty">No comments found.</p>
 }
 @for (comment of comments(); track comment.id) {
 <app-comment [comment]="comment" />
