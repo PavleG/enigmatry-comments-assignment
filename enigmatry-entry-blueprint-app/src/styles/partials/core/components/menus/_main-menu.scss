@@ -23,11 +23,14 @@
     }
 
     .search-field {
-      // TODO: centers the search field
+      // TODO: centers the search field... There is some div under it
+      // I can't get rid of that div, so I'll just use the top margin hack for now
+      margin-top: 20px;
       display: flex;
-      align-items: center; // centers the mat-form-field wrapper
+      align-items: center;
       min-width: 250px;
       max-width: 400px;
+      height: 100%;
     }
   }
 

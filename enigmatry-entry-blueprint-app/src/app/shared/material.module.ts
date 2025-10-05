@@ -25,10 +25,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import {
-  provideMatDateFormats,
-  provideMatDateLocale
-} from '../core/i18n/localization';
 import { CustomPaginatorIntl } from './components/paginator/custom-paginator-intl';
 
 @NgModule({
@@ -61,8 +57,6 @@ import { CustomPaginatorIntl } from './components/paginator/custom-paginator-int
     MatMenuModule
   ],
   providers: [
-    provideMatDateLocale(),
-    provideMatDateFormats(),
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline', floatLabel: 'auto' }
