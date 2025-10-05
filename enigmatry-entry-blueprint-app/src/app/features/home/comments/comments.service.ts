@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { inject, Injectable, signal } from '@angular/core';
+import { LoggerService } from '@app/services/logger.service';
 import type { Comment } from '@shared/model/comment.model';
 import { PagedResult } from '@shared/model/paged-result.model';
 import {
@@ -16,6 +17,7 @@ import { CommentsClient } from 'src/app/api/comments-api.service';
 @Injectable({ providedIn: 'root' })
 export class CommentsService {
   private commentsClient = inject(CommentsClient);
+  private logger = inject(LoggerService);
 
   private comments = signal<Comment[]>([]);
   private totalComments = signal<number>(0);
@@ -90,19 +92,28 @@ export class CommentsService {
 
   private handleError<T>(context: string): (error: unknown) => Observable<T> {
     return (error: unknown): Observable<T> => {
-      if (error instanceof Error) {
-        // TODO: Log the error
-        // eslint-disable-next-line no-console
-        console.error(`Error in ${context}:`, error.message);
-      } else {
-        // TODO: Log the error
-        // eslint-disable-next-line no-console
-        console.error(`Error in ${context}:`, error);
+      this.logger.error(error, `CommentsService: ${context}`);
+      let errorMessage = '';
+      switch (context) {
+        case 'fetching comments':
+          errorMessage = $localize`:@@error.fetchingComments:Failed to fetch comments.`;
+          break;
+        case 'fetching comment':
+          errorMessage = $localize`:@@error.fetchingComment:Failed to fetch comment.`;
+          break;
+        case 'adding comment':
+          errorMessage = $localize`:@@error.addingComment:Failed to add comment.`;
+          break;
+        case 'updating comment':
+          errorMessage = $localize`:@@error.updatingComment:Failed to update comment.`;
+          break;
+        case 'deleting comment':
+          errorMessage = $localize`:@@error.deletingComment:Failed to delete comment.`;
+          break;
+        default:
+          errorMessage = $localize`:@@error.generic:Oops! Something went wrong. Please try again later.`;
       }
-      return throwError(
-        // TODO: Translate the error message
-        () => new Error(`Something went wrong ${context.toLowerCase()}`)
-      );
+      return throwError(() => new Error(errorMessage));
     };
   }
 

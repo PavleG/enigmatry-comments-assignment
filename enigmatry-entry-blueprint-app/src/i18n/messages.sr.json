@@ -41,6 +41,12 @@
     "route.home": "Početna",
     "route.messages": "Poruke",
     "route.not-found": "Ne postoji",
-    "route.unauthorized": "Niste autorizovani"
+    "route.unauthorized": "Niste autorizovani",
+    "error.fetchingComments": "Neuspešno učitavanje komentara.",
+    "error.fetchingComment": "Neuspešno učitavanje komentara.",
+    "error.addingComment": "Neuspešno dodavanje komentara.",
+    "error.updatingComment": "Neuspešno ažuriranje komentara.",
+    "error.deletingComment": "Neuspešno brisanje komentara.",
+    "error.generic": "Ups! Nešto je pošlo po zlu. Molimo pokušajte ponovo kasnije."
   }
 }

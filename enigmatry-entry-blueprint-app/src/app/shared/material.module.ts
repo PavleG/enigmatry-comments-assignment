@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -28,7 +29,7 @@ import {
   provideMatDateFormats,
   provideMatDateLocale
 } from '../core/i18n/localization';
-import { CustomPaginatorIntl } from './components/paginator/custome-paginator-intl';
+import { CustomPaginatorIntl } from './components/paginator/custom-paginator-intl';
 
 @NgModule({
   declarations: [],
@@ -48,6 +49,7 @@ import { CustomPaginatorIntl } from './components/paginator/custome-paginator-in
     MatSliderModule,
     MatFormFieldModule,
     MatSlideToggleModule,
+    MatProgressSpinnerModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,

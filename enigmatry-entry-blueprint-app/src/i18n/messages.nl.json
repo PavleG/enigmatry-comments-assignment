@@ -41,6 +41,12 @@
     "route.home": "Startpagina",
     "route.messages": "Berichten",
     "route.not-found": "Niet gevonden",
-    "route.unauthorized": "Niet toegestaan"
+    "route.unauthorized": "Niet toegestaan",
+    "error.fetchingComments": "Opmerkingen ophalen is mislukt.",
+    "error.fetchingComment": "Opmerking ophalen is mislukt.",
+    "error.addingComment": "Opmerking toevoegen is mislukt.",
+    "error.updatingComment": "Opmerking bijwerken is mislukt.",
+    "error.deletingComment": "Opmerking verwijderen is mislukt.",
+    "error.generic": "Oeps! Er is iets misgegaan. Probeer het later opnieuw."
   }
 }

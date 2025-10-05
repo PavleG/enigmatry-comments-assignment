@@ -21,6 +21,7 @@ public class CommentsController : ControllerBase
     [FromQuery] int size = 5,
     [FromQuery] string? search = null)
     {
+        Thread.Sleep(1000); // Simulate latency
         var query = _service.GetAll().AsQueryable();
 
         if (!String.IsNullOrWhiteSpace(search))

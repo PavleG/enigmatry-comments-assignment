@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '@env';
 import type { Comment } from '@shared/model/comment.model';
 import { PagedResult } from '@shared/model/paged-result.model';
 import { Observable } from 'rxjs';
@@ -7,7 +8,7 @@ import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class CommentsClient {
-  private readonly apiUrl = 'http://localhost:5018/api/comments';
+  private readonly apiUrl = `${environment.apiUrl}/api/comments`;
 
   constructor(private httpClient: HttpClient) {}
 

@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '@env';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class MessagesClient {
-  private readonly apiUrl = 'http://localhost:5018/api/messages';
+  private readonly apiUrl = `${environment.apiUrl}/api/messages`;
 
   constructor(private httpClient: HttpClient) {}
 

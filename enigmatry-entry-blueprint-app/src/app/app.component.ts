@@ -11,8 +11,6 @@ import { HeaderComponent } from '@shared/components/header/header.component';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'enigmatry-entry-blueprint-app';
-
   constructor(private readonly element: ElementRef,
     private readonly sizeService: SizeService) { }
 
