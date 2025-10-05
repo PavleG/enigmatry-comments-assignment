@@ -14,7 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -28,6 +28,7 @@ import {
   provideMatDateFormats,
   provideMatDateLocale
 } from '../core/i18n/localization';
+import { CustomPaginatorIntl } from './components/paginator/custome-paginator-intl';
 
 @NgModule({
   declarations: [],
@@ -63,6 +64,10 @@ import {
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline', floatLabel: 'auto' }
+    },
+    {
+      provide: MatPaginatorIntl,
+      useClass: CustomPaginatorIntl
     }
   ]
 })
