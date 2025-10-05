@@ -50,12 +50,12 @@ export class CommentUpsertDialogComponent {
   });
 
   get isTitleInvalid() {
-    return this.form.controls.title.dirty && this.form.controls.title.invalid;
+    return this.form.controls.title.touched && this.form.controls.title.invalid;
   }
 
   get isContentInvalid() {
     return (
-      this.form.controls.content.dirty && this.form.controls.content.invalid
+      this.form.controls.content.touched && this.form.controls.content.invalid
     );
   }
 
