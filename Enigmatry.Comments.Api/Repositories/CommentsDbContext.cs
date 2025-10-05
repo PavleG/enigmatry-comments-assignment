@@ -11,12 +11,19 @@ public class CommentsDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        var fourthId = Guid.NewGuid();
         modelBuilder.Entity<Comment>().HasData(
             new Comment { Id = Guid.NewGuid(), Title = "First Comment", Text = "This is the first comment.", CreatedAt = DateTime.UtcNow },
             new Comment { Id = Guid.NewGuid(), Title = "Second Comment", Text = "This is the second comment.", CreatedAt = DateTime.UtcNow },
             new Comment { Id = Guid.NewGuid(), Title = "Third Comment", Text = "This is the third comment.", CreatedAt = DateTime.UtcNow },
-            new Comment { Id = Guid.NewGuid(), Title = "Fourth Comment", Text = "This is the fourth comment.", CreatedAt = DateTime.UtcNow },
-            new Comment { Id = Guid.NewGuid(), Title = "Fifth Comment", Text = "This is the fifth comment.", CreatedAt = DateTime.UtcNow },
+            new Comment { Id = fourthId, Title = $"Fourth Comment - id: {fourthId}", Text = "This is the fourth comment.", CreatedAt = DateTime.UtcNow },
+            new Comment
+            {
+                Id = Guid.NewGuid(),
+                Title = "Fifth Comment",
+                Text = "This is the fifth comment. Unlike the others, it is intentionally much longer so that it exceeds one hundred characters in length, making it valid for the comment details page example.",
+                CreatedAt = DateTime.UtcNow
+            },
             new Comment { Id = Guid.NewGuid(), Title = "Sixth Comment", Text = "This is the sixth comment.", CreatedAt = DateTime.UtcNow }
         );
     }

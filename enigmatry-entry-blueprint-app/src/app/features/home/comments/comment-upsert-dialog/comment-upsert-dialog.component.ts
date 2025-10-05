@@ -10,15 +10,13 @@ import {
   MatDialogRef
 } from '@angular/material/dialog';
 import { MaterialModule } from '@shared/material.module';
+import { COMMENT_DESCRIPTION_MAX_LENGTH, COMMENT_TITLE_MAX_LENGTH } from '../comments.constants';
 import type { UpsertDialogData } from './comment-upsert-dialog.model';
 
 @Component({
   selector: 'app-comment-upsert-dialog',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MaterialModule
-  ],
+  imports: [ReactiveFormsModule, MaterialModule],
   templateUrl: './comment-upsert-dialog.component.html',
   styleUrl: './comment-upsert-dialog.component.scss'
 })
@@ -28,8 +26,8 @@ export class CommentUpsertDialogComponent {
   );
   private data = inject<UpsertDialogData>(MAT_DIALOG_DATA);
 
-  private readonly maxTitleLength = 20;
-  private readonly maxContentLength = 50;
+  private readonly maxTitleLength = COMMENT_TITLE_MAX_LENGTH;
+  private readonly maxContentLength = COMMENT_DESCRIPTION_MAX_LENGTH;
 
   form: FormGroup = new FormGroup({
     title: new FormControl(this.data.title, {

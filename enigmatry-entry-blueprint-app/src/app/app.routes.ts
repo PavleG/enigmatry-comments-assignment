@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, Routes } from '@angular/router';
 import { CommentDetailsComponent } from '@features/home/comments/comment-details/comment-details.component';
+import { COMMENT_CARD_DESCRIPTION_MAX_LENGTH } from '@features/home/comments/comments.constants';
 import { CommentsService } from '@features/home/comments/comments.service';
 import { HomeComponent } from '@features/home/home.component';
 import { MessageService } from '@features/home/message-container/message.service';
@@ -13,12 +14,13 @@ export const detailsCanActivate: CanActivateFn = route => {
   const commentId = route.params.commentId;
   const commentsService = inject(CommentsService);
   const router = inject(Router);
-  const guardLen = 5;
 
   return commentsService.getComment(commentId).pipe(
-    map(comment => comment && comment.description.length > guardLen
-      ? true
-      : router.createUrlTree(['/unauthorized'])
+    map(comment =>
+      comment &&
+      comment.description.length > COMMENT_CARD_DESCRIPTION_MAX_LENGTH
+        ? true
+        : router.createUrlTree(['/unauthorized'])
     ),
     catchError(() => of(router.createUrlTree(['/unauthorized'])))
   );

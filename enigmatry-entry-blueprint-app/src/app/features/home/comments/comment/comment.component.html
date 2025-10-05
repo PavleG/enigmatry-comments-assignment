@@ -1,13 +1,19 @@
 <mat-card appearance="outlined">
   <mat-card-header>
-    <mat-card-title [routerLink]="['comments', comment.id]">{{
+    @if(comment.description.length > cardDescriptionMaxLength) {
+    <mat-card-title><a [routerLink]="['comments', comment.id]">{{
       comment.title
-    }}</mat-card-title>
+    }}</a></mat-card-title>
+    } @else { 
+      <mat-card-title>{{ comment.title }}</mat-card-title>
+    }
+
     <mat-card-subtitle>
       <span i18n="@@comment.postedOn">Posted date:</span>
       {{ comment.postedOn | date }}
       <span i18n="@@comment.by">by Some Person</span>
     </mat-card-subtitle>
+
     @if (comment.editedOn) {
     <mat-card-subtitle>
       <span i18n="@@comment.edited">Edited:</span>
@@ -18,7 +24,7 @@
   </mat-card-header>
   <mat-card-content>
     <p>
-      {{ comment.description | truncate: 15 }}
+      {{ comment.description | truncate : cardDescriptionMaxLength }}
     </p>
   </mat-card-content>
   <mat-card-actions align="end">

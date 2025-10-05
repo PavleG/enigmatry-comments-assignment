@@ -10,6 +10,7 @@ import { filter, mergeMap } from 'rxjs';
 import type { Comment } from '../../../../shared/model/comment.model';
 import { CommentUpsertDialogComponent } from '../comment-upsert-dialog/comment-upsert-dialog.component';
 import type { UpsertDialogData } from '../comment-upsert-dialog/comment-upsert-dialog.model';
+import { COMMENT_CARD_DESCRIPTION_MAX_LENGTH } from '../comments.constants';
 import { CommentsService } from '../comments.service';
 
 @Component({
@@ -21,6 +22,7 @@ import { CommentsService } from '../comments.service';
 })
 export class CommentComponent {
   @Input({ required: true }) comment: Comment;
+  readonly cardDescriptionMaxLength = COMMENT_CARD_DESCRIPTION_MAX_LENGTH;
 
   constructor(
     private commentsService: CommentsService,
