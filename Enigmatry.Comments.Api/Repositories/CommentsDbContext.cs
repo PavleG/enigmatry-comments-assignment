@@ -16,7 +16,7 @@ public class CommentsDbContext : DbContext
             new Comment { Id = Guid.NewGuid(), Title = "First Comment", Text = "This is the first comment.", CreatedAt = DateTime.UtcNow },
             new Comment { Id = Guid.NewGuid(), Title = "Second Comment", Text = "This is the second comment.", CreatedAt = DateTime.UtcNow },
             new Comment { Id = Guid.NewGuid(), Title = "Third Comment", Text = "This is the third comment.", CreatedAt = DateTime.UtcNow },
-            new Comment { Id = fourthId, Title = $"Fourth Comment - id: {fourthId}", Text = "This is the fourth comment.", CreatedAt = DateTime.UtcNow },
+            new Comment { Id = fourthId, Title = $"Fourth Comment", Text = $"This is the fourth comment. Here is the id for testing direct URL access: {fourthId}", CreatedAt = DateTime.UtcNow },
             new Comment
             {
                 Id = Guid.NewGuid(),

@@ -20,8 +20,13 @@
     "comment.title.required": "Titel is verplicht",
     "comments.add": "Opmerking toevoegen",
     "comments.empty": "Geen opmerkingen gevonden.",
-    "comments.loading": "Opmerkingen laden...",
+    "error.addingComment": "Opmerking toevoegen is mislukt.",
     "error.close": "Sluit",
+    "error.deletingComment": "Opmerking verwijderen is mislukt.",
+    "error.fetchingComment": "Opmerking ophalen is mislukt.",
+    "error.fetchingComments": "Opmerkingen ophalen is mislukt.",
+    "error.generic": "Oeps! Er is iets misgegaan. Probeer het later opnieuw.",
+    "error.updatingComment": "Opmerking bijwerken is mislukt.",
     "header.search.placeholder": "Zoek opmerkingen",
     "home.title": "Lijst met opmerkingen",
     "message-box.message": "Je hebt nieuwe berichten!",
@@ -41,12 +46,6 @@
     "route.home": "Startpagina",
     "route.messages": "Berichten",
     "route.not-found": "Niet gevonden",
-    "route.unauthorized": "Niet toegestaan",
-    "error.fetchingComments": "Opmerkingen ophalen is mislukt.",
-    "error.fetchingComment": "Opmerking ophalen is mislukt.",
-    "error.addingComment": "Opmerking toevoegen is mislukt.",
-    "error.updatingComment": "Opmerking bijwerken is mislukt.",
-    "error.deletingComment": "Opmerking verwijderen is mislukt.",
-    "error.generic": "Oeps! Er is iets misgegaan. Probeer het later opnieuw."
+    "route.unauthorized": "Niet toegestaan"
   }
 }

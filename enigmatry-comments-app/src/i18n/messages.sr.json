@@ -20,8 +20,13 @@
     "comment.title.required": "Naslov je obavezan",
     "comments.add": "Dodaj komentar",
     "comments.empty": "Nema pronađenih komentara.",
-    "comments.loading": "Učitavanje komentara...",
+    "error.addingComment": "Neuspešno dodavanje komentara.",
     "error.close": "Zatvori",
+    "error.deletingComment": "Neuspešno brisanje komentara.",
+    "error.fetchingComment": "Neuspešno učitavanje komentara.",
+    "error.fetchingComments": "Neuspešno učitavanje komentara.",
+    "error.generic": "Ups! Nešto je pošlo po zlu. Molimo pokušajte ponovo kasnije.",
+    "error.updatingComment": "Neuspešno ažuriranje komentara.",
     "header.search.placeholder": "Pretraži komentare",
     "home.title": "Lista komentara",
     "message-box.message": "Imate nove poruke!",
@@ -41,12 +46,6 @@
     "route.home": "Početna",
     "route.messages": "Poruke",
     "route.not-found": "Ne postoji",
-    "route.unauthorized": "Niste autorizovani",
-    "error.fetchingComments": "Neuspešno učitavanje komentara.",
-    "error.fetchingComment": "Neuspešno učitavanje komentara.",
-    "error.addingComment": "Neuspešno dodavanje komentara.",
-    "error.updatingComment": "Neuspešno ažuriranje komentara.",
-    "error.deletingComment": "Neuspešno brisanje komentara.",
-    "error.generic": "Ups! Nešto je pošlo po zlu. Molimo pokušajte ponovo kasnije."
+    "route.unauthorized": "Niste autorizovani"
   }
 }
